@@ -25,7 +25,7 @@ else ifeq ($(PLATFORM),MSP432)
 		./memory.c \
 		./startup_msp432p401r_gcc.c \
 		./system_msp432p401r.c \
-		./interrupts_msp432p401_gcc.c
+		./interrupts_msp432p401r_gcc.c
 
 	INCLUDES = \
 		-I ../include/common \

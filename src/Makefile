@@ -52,11 +52,18 @@ endif
 
 OBJS = $(SOURCES:.c=.o)
 
-.PHONY: Build
-Build: $(TARGET).out
-
 %.o : %.c
 	$(CC) -c $< $(INCLUDES) $(CFLAGS) $(CPPFLAGs) -o $@
 
 $(TARGET).out: $(OBJS)
 	$(CC) $(OBJS) $(INCLUDES) $(CFLAGS) $(CPPFLAGs) $(LDFLAGS) -o $@
+
+.PHONY: Build
+Build: $(TARGET).out
+
+.PHONY: compile-all
+compile-all: $(OBJS)
+
+.PHONY: Clean
+Clean:
+	rm -f $(OBJS) $(TARGET).out $(TARGET).map
