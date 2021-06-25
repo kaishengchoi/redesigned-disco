@@ -49,3 +49,14 @@ else ifeq ($(PLATFORM),MSP432)
 	CPPFLAGs = -DMSP432 
 
 endif
+
+OBJS = $(SOURCES:.c=.o)
+
+.PHONY: Build
+Build: $(TARGET).out
+
+%.o : %.c
+	$(CC) -c $< $(INCLUDES) $(CFLAGS) $(CPPFLAGs) -o $@
+
+$(TARGET).out: $(OBJS)
+	$(CC) $(OBJS) $(INCLUDES) $(CFLAGS) $(CPPFLAGs) $(LDFLAGS) -o $@
