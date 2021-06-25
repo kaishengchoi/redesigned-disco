@@ -27,16 +27,18 @@ TARGET = c1m2
 PPFS = $(SOURCES:.c=.i)
 ASMs = $(SOURCES:.c=.asm)
 OBJS = $(SOURCES:.c=.o)
+DEPS = $(SOURCES:.c=.d)
 
 ifeq ($(PLATFORM),HOST)
 
 	CC = gcc
 	LD = ld
 	OBJDUMP = objdump
+	SIZE = size
 
 	LDFLAGS = -Wl,-Map=$(TARGET).map
 	CFLAGS = -Wall -Werror -g -O0 -std=c99
-	CPPFLAGs = -DHOST
+	CPPFLAGs = -DHOST -MD -MP 
 
 else ifeq ($(PLATFORM),MSP432)
 
@@ -48,10 +50,11 @@ else ifeq ($(PLATFORM),MSP432)
 	CC = arm-none-eabi-gcc
 	LD = arm-none-eabi-ld
 	OBJDUMP = arm-none-eabi-objdump
+	SIZE = arm-none-eabi-size
 
 	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
 	CFLAGS = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS) -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall -Werror -g -O0 -std=c99
-	CPPFLAGs = -DMSP432
+	CPPFLAGs = -DMSP432 -MD -MP  
 
 endif
 
@@ -66,16 +69,17 @@ endif
 
 $(TARGET).out: $(OBJS)
 	$(CC) $(OBJS) $(INCLUDES) $(CFLAGS) $(CPPFLAGs) $(LDFLAGS) -o $@
+	$(SIZE) $@
 
 $(TARGET).asm : $(TARGET).out
 	$(OBJDUMP) -d $< >> $@
 
-.PHONY: Build
-Build: $(TARGET).out
+.PHONY: build
+build: $(TARGET).out
 
 .PHONY: compile-all
 compile-all: $(OBJS)
 
-.PHONY: Clean
-Clean:
-	rm -f $(PPFS) $(ASMs) $(OBJS) $(TARGET).asm $(TARGET).out $(TARGET).map
+.PHONY: clean
+clean:
+	rm -f $(PPFS) $(ASMs) $(OBJS) $(DEPS) $(TARGET).asm $(TARGET).out $(TARGET).map
