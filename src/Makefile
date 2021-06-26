@@ -10,15 +10,22 @@
 #*****************************************************************************
 
 #------------------------------------------------------------------------------
-# <Put a Description Here>
+# Simple makefile for the cortex-M4 and HOST(Linux) build system
 #
 # Use: make [TARGET] [PLATFORM-OVERRIDES]
 #
 # Build Targets:
-#      <Put a description of the supported targets here>
+#	   <FILE>.o - Builds <FILE>.o object file
+#	   <FILE>.i - Generate the preprocessed output of the <FILE>.i
+#      <FILE>.asm - Generate assembly output of <FILE>.asm
+#      compile-all : Compiles all files, doesn't build
+#	   build: Compile all object files and link into a final executable
+#	   clean: removes all generated files.
 #
 # Platform Overrides:
-#      <Put a description of the supported Overrides here
+#      CPU -  ARM Cortex Architecture(cortex-m4)
+#	   ARCH - ARM Architecture (thumb)
+#	   SPECS - Specs file to give the linker (nosys.specs)
 #
 #------------------------------------------------------------------------------
 include sources.mk
